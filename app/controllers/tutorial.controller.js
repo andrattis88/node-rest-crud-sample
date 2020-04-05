@@ -1,6 +1,6 @@
 const db = require("../models");
 const Tutorial = db.tutorials;
-const Op = db.sequelize.Op;
+const Op = db.Sequelize.Op;
 
 // Create
 exports.create = (req, res) => {
@@ -13,7 +13,7 @@ exports.create = (req, res) => {
     }
 
     // Create a Tutorial
-    const Tutorial = {
+    const tutorial = {
         title : req.body.title,
         description : req.body.description,
         published : req.body.published ? req.body.published : false
@@ -50,8 +50,8 @@ exports.findOne = (req, res) => {
 // Find All / Find All with given title
 exports.findAll = (req, res) => {
     const title = req.query.title;
-
-    var condition = title ? { title : { [Op.like] : `%${title}` } } : null;
+   
+    var condition = title ? { title : { [Op.like] : `%${title}%` } } : null;
 
     Tutorial.findAll({ where : condition })
         .then(data => {
@@ -66,6 +66,7 @@ exports.findAll = (req, res) => {
 
 // Find all published 
 exports.findAllPublished = (req, res) => {
+
     Tutorial.findAll({ where : { published : true }})
         .then(data => {
             res.send(data);
